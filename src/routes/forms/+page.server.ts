@@ -1,15 +1,14 @@
 import { z } from 'zod';
-import { fail } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 
 const schema = z.object({
 	name: z.string().min(2, "Ім'я повинно містити мінімум 2 символи"),
-	email: z.string().min(1, "Email є обов'язковим").email('Введіть правильний email адрес')
+	email: z.string().email('Введіть правильний email адрес').min(1, "Email є обов'язковим")
 });
 
-export const actions = {
-	create: async ({ request }: { request: Request }) => {
+export const actions: Actions = {
+	create: async ({ request }) => {
 		const formData = await request.formData();
-
 		const formDataObj = Object.fromEntries(formData.entries());
 
 		const parsed = schema.safeParse(formDataObj);
