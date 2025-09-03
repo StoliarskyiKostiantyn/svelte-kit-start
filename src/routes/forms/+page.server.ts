@@ -3,7 +3,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 
 const schema = z.object({
 	name: z.string().min(2, "Ім'я повинно містити мінімум 2 символи"),
-	email: z.string().email('Введіть правильний email адрес').min(1, "Email є обов'язковим")
+	email: z.email('Введіть правильний email адрес').min(1, "Email є обов'язковим")
 });
 
 export const actions: Actions = {
