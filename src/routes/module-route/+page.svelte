@@ -1,7 +1,6 @@
 <script lang="js">
 	import { Button } from 'flowbite-svelte';
 	import { HomeSolid } from 'flowbite-svelte-icons';
-	export const ssr = false;
 	import { gsap } from 'gsap';
 	import { onMount } from 'svelte';
 
