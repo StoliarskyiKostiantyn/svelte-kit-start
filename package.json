@@ -20,6 +20,7 @@
 		"@eslint/js": "^9.18.0",
 		"@flowbite-svelte-plugins/chart": "^0.2.4",
 		"@sveltejs/adapter-auto": "^6.0.0",
+		"@sveltejs/adapter-node": "^5.3.1",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/typography": "^0.5.15",
@@ -45,9 +46,11 @@
 		"vitest-browser-svelte": "^0.1.0"
 	},
 	"dependencies": {
+		"@tanstack/svelte-form": "^1.19.3",
 		"apexcharts": "^5.3.1",
 		"flowbite-svelte-icons": "^2.2.1",
 		"gsap": "^3.13.0",
+		"tippy.js": "^6.3.7",
 		"zod": "^4.1.3"
 	}
 }

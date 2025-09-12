@@ -4,6 +4,38 @@
 	import { z } from 'zod';
 	import { Button } from 'flowbite-svelte';
 	import { HomeSolid } from 'flowbite-svelte-icons';
+	import { createForm } from '@tanstack/svelte-form';
+	import FieldInfo from '../../lib/Fieldinfo.svelte';
+
+	async function handleSubmitTanstack(data: any) {
+		const formData = new FormData();
+		formData.append('firstName', data.firstName); // або data.name, якщо так називається поле
+		formData.append('lastName', data.lastName);
+
+		formData.append('employed', data.employed);
+		formData.append('jobTitle', data.jobTitle);
+
+		const response = await fetch('?/create2', {
+			method: 'POST',
+			body: formData
+		});
+
+		// Обробіть відповідь, якщо потрібно
+		const result = await response.json();
+		alert(JSON.stringify(result));
+		// ...далі ваша логіка
+	}
+	const tanstackForm = createForm(() => ({
+		defaultValues: {
+			firstName: '',
+			lastName: '',
+			employed: false,
+			jobTitle: ''
+		},
+		onSubmit: async ({ value }) => {
+			await handleSubmitTanstack(value);
+		}
+	}));
 
 	// Схема валідації
 	const schema = z.object({
@@ -119,4 +151,149 @@
 			❌ Виникли помилки при відправці
 		</div>
 	{/if}
+</form>
+
+<form
+	id="form"
+	onsubmit={(e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		tanstackForm.handleSubmit();
+	}}
+	class="mx-auto max-w-md space-y-4 rounded-lg bg-gray-50 p-6 shadow"
+>
+	<h1 class="mb-6 text-center text-2xl font-bold text-blue-600">TanStack Form - Svelte Demo</h1>
+
+	<tanstackForm.Field
+		name="firstName"
+		validators={{
+			onChange: ({ value }) => (value.length < 3 ? 'Not long enough' : undefined),
+			onChangeAsyncDebounceMs: 500,
+			onChangeAsync: async ({ value }) => {
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+				return value.includes('error') && 'No "error" allowed in first name';
+			}
+		}}
+	>
+		{#snippet children(field)}
+			<div class="mb-4">
+				<label for={field.name} class="mb-1 block text-sm font-medium text-gray-700"
+					>First Name</label
+				>
+				<input
+					id={field.name}
+					type="text"
+					placeholder="First Name"
+					value={field.state.value}
+					onblur={() => field.handleBlur()}
+					oninput={(e: Event) => {
+						const target = e.target as HTMLInputElement;
+						field.handleChange(target.value);
+					}}
+					class="focus:ring-opacity-50 w-full rounded-lg border border-gray-300 p-3 transition-colors focus:border-blue-500 focus:ring focus:ring-blue-200"
+				/>
+				<FieldInfo {field} />
+			</div>
+		{/snippet}
+	</tanstackForm.Field>
+	<tanstackForm.Field
+		name="lastName"
+		validators={{
+			onChange: ({ value }) => (value.length < 3 ? 'Not long enough' : undefined)
+		}}
+	>
+		{#snippet children(field)}
+			<div class="mb-4">
+				<label for={field.name} class="mb-1 block text-sm font-medium text-gray-700"
+					>Last Name</label
+				>
+				<input
+					id={field.name}
+					type="text"
+					placeholder="Last Name"
+					value={field.state.value}
+					onblur={() => field.handleBlur()}
+					oninput={(e: Event) => {
+						const target = e.target as HTMLInputElement;
+						field.handleChange(target.value);
+					}}
+					class="focus:ring-opacity-50 w-full rounded-lg border border-gray-300 p-3 transition-colors focus:border-blue-500 focus:ring focus:ring-blue-200"
+				/>
+				<FieldInfo {field} />
+			</div>
+		{/snippet}
+	</tanstackForm.Field>
+	<tanstackForm.Field name="employed">
+		{#snippet children(field)}
+			<div class="mb-4 flex items-center gap-2">
+				<input
+					oninput={() => field.handleChange(!field.state.value)}
+					checked={field.state.value}
+					onblur={() => field.handleBlur()}
+					id={field.name}
+					type="checkbox"
+					class="rounded border-gray-300 focus:ring-blue-500"
+				/>
+				<label for={field.name} class="text-sm font-medium text-gray-700">Employed?</label>
+			</div>
+			{#if field.state.value}
+				<tanstackForm.Field
+					name="jobTitle"
+					validators={{
+						onChange: ({ value }) =>
+							value.length === 0 ? 'If you have a job, you need a title' : null
+					}}
+				>
+					{#snippet children(field)}
+						<div class="mb-4">
+							<label for={field.name} class="mb-1 block text-sm font-medium text-gray-700"
+								>Job Title</label
+							>
+							<input
+								type="text"
+								id={field.name}
+								placeholder="Job Title"
+								value={field.state.value}
+								onblur={field.handleBlur}
+								oninput={(e: Event) => {
+									const target = e.target as HTMLInputElement;
+									field.handleChange(target.value);
+								}}
+								class="focus:ring-opacity-50 w-full rounded-lg border border-gray-300 p-3 transition-colors focus:border-blue-500 focus:ring focus:ring-blue-200"
+							/>
+							<FieldInfo {field} />
+						</div>
+					{/snippet}
+				</tanstackForm.Field>
+			{/if}
+		{/snippet}
+	</tanstackForm.Field>
+	<div class="mt-6 flex gap-2">
+		<tanstackForm.Subscribe
+			selector={(state) => ({
+				canSubmit: state.canSubmit,
+				isSubmitting: state.isSubmitting
+			})}
+		>
+			{#snippet children({ canSubmit, isSubmitting })}
+				<button
+					type="submit"
+					disabled={!canSubmit}
+					class="w-full rounded-lg bg-blue-500 py-3 font-medium text-white transition-colors hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+				>
+					{isSubmitting ? 'Submitting...' : 'Submit'}
+				</button>
+			{/snippet}
+		</tanstackForm.Subscribe>
+		<button
+			type="button"
+			id="reset"
+			onclick={() => {
+				tanstackForm.reset();
+			}}
+			class="w-full rounded-lg bg-gray-300 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-400"
+		>
+			Reset
+		</button>
+	</div>
 </form>

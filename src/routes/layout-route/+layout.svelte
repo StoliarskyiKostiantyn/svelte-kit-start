@@ -21,11 +21,6 @@
 </div>
 
 <style>
-	:global(body) {
-		background: linear-gradient(135deg, #232946 0%, #5f6caf 100%);
-		min-height: 100vh;
-	}
-
 	.nav {
 		display: flex;
 		gap: 1.5em;

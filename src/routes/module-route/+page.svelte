@@ -29,17 +29,12 @@
 			});
 		}
 	});
-
-	onMount(() => {
-		document.querySelectorAll('.box').forEach(function (box) {
-			box.addEventListener('mouseenter', function () {
-				gsap.effects.fade(this);
-			});
-			box.addEventListener('mouseleave', function () {
-				gsap.effects.resetFade(this);
-			});
-		});
-	});
+	function onMouseEnterEvent() {
+		gsap.effects.fade(this);
+	}
+	function onMouseLeaveEvent() {
+		gsap.effects.resetFade(this);
+	}
 </script>
 
 <Button href="/" color="light" class="inline-flex items-center">
@@ -51,14 +46,30 @@
 <div id="demo">
 	<h2>GSAP Effects Demo</h2>
 	<div class="boxes">
-		<div class="box green">green</div>
-		<div class="box purple">purple</div>
-		<div class="box orange">orange</div>
-		<div class="box green">green</div>
-		<div class="box purple">purple</div>
-		<div class="box orange">orange</div>
-		<div class="box green">green</div>
-		<div class="box purple">purple</div>
+		<div
+			class="box green"
+			on:mouseenter={onMouseEnterEvent}
+			on:mouseleave={onMouseLeaveEvent}
+			role="application"
+		>
+			green
+		</div>
+		<div
+			class="box orange"
+			on:mouseenter={onMouseEnterEvent}
+			on:mouseleave={onMouseLeaveEvent}
+			role="application"
+		>
+			orange
+		</div>
+		<div
+			class="box green"
+			on:mouseenter={onMouseEnterEvent}
+			on:mouseleave={onMouseLeaveEvent}
+			role="application"
+		>
+			green
+		</div>
 	</div>
 </div>
 
@@ -122,9 +133,7 @@
 	.green {
 		background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
 	}
-	.purple {
-		background: linear-gradient(135deg, #8f6ed5 0%, #3b3b98 100%);
-	}
+
 	.orange {
 		background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
 	}

@@ -4,7 +4,10 @@
 		GridSolid,
 		RectangleListSolid,
 		ArrowUpRightFromSquareSolid,
-		ComputerSpeakerSolid
+		ComputerSpeakerSolid,
+		LockOpenSolid,
+		ReplyAllSolid,
+		UploadSolid
 	} from 'flowbite-svelte-icons';
 	import { page } from '$app/state';
 	let activeUrl = $state(page.url.pathname);
@@ -34,11 +37,9 @@
 	>
 		<SidebarGroup>
 			<SidebarItem label="Forms" href="/forms">
-				{#snippet icon()}
-					<RectangleListSolid
-						class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-					/>
-				{/snippet}
+				<RectangleListSolid
+					class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+				/>
 			</SidebarItem>
 			<SidebarItem label="Ref forwarding" {spanClass} href="/ref">
 				{#snippet icon()}
@@ -77,6 +78,21 @@
 							d="M12.503 2.134a1 1 0 0 0-1 0L4.501 6.17A1 1 0 0 0 4.5 7.902l7.002 4.047a1 1 0 0 0 1 0l6.998-4.04a1 1 0 0 0 0-1.732l-6.997-4.042Z"
 						/>
 					</svg>
+				{/snippet}
+			</SidebarItem>
+			<SidebarItem label="Key route" {spanClass} href="/key-route">
+				{#snippet icon()}
+					<LockOpenSolid class="h-6 w-6 shrink-0" />
+				{/snippet}
+			</SidebarItem>
+			<SidebarItem label="Bind route" {spanClass} href="/bind-route">
+				{#snippet icon()}
+					<ReplyAllSolid class="h-6 w-6 shrink-0" />
+				{/snippet}
+			</SidebarItem>
+			<SidebarItem label="Load route" {spanClass} href="/load-route">
+				{#snippet icon()}
+					<UploadSolid class="h-6 w-6 shrink-0" />
 				{/snippet}
 			</SidebarItem>
 		</SidebarGroup>

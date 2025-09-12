@@ -5,7 +5,18 @@
 	let { children } = $props();
 	import { DarkMode } from 'flowbite-svelte';
 	import { Navbar, NavBrand, NavHamburger, Avatar } from 'flowbite-svelte';
-	import { page } from '$app/state';
+
+	import { onNavigate } from '$app/navigation';
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <Navbar>
